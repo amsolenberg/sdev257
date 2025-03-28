@@ -1,20 +1,42 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from 'react';
+import { Platform } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-export default function App() {
+import Home from './Home';
+import Planets from './Planets';
+import Films from './Films';
+import Spaceships from './Spaceships';
+
+const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
+
+function renderScreens(Navigator) {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Navigator.Navigator>
+      <Navigator.Screen
+        name='Home'
+        component={Home}
+      />
+      <Navigator.Screen
+        name='Planets'
+        component={Planets}
+      />
+      <Navigator.Screen
+        name='Films'
+        component={Films}
+      />
+      <Navigator.Screen
+        name='Spaceships'
+        component={Spaceships}
+      />
+    </Navigator.Navigator>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+  const isIOS = Platform.OS === 'ios';
+
+  return <NavigationContainer>{isIOS ? renderScreens(Tab) : renderScreens(Drawer)}</NavigationContainer>;
+}
