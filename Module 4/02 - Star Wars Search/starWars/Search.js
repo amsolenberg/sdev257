@@ -1,11 +1,14 @@
+// Import required components and styles
 import React, { useState } from 'react';
 import { View, Text, TextInput, Modal, Button } from 'react-native';
 import styles from './styles';
 
 export default function Search() {
+  // State for search input and modal visibility
   const [searchText, setSearchText] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
 
+  // Show modal when input is submitted
   const handleSearchSubmit = () => {
     setModalVisible(true);
   };

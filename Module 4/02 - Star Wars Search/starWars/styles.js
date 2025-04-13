@@ -1,3 +1,4 @@
+// Define and export reusable style definitions
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({

@@ -1,11 +1,14 @@
+// Import components and styles
 import React, { useEffect, useState } from 'react';
 import { View, Text, ActivityIndicator, FlatList } from 'react-native';
 import styles from './styles';
 
 export default function Spaceships() {
+  // State for spaceship data and loading flag
   const [spaceships, setSpaceships] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch spaceship data on mount
   useEffect(() => {
     fetch('https://www.swapi.tech/api/starships')
       .then((response) => response.json())
@@ -17,6 +20,7 @@ export default function Spaceships() {
       .finally(() => setLoading(false));
   }, []);
 
+  // Display spinner while loading
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -28,6 +32,7 @@ export default function Spaceships() {
     );
   }
 
+  // Show list of spaceship names
   return (
     <View style={styles.container}>
       <FlatList
