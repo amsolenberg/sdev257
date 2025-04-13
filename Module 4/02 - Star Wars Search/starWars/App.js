@@ -8,6 +8,7 @@ import Home from './Home';
 import Planets from './Planets';
 import Films from './Films';
 import Spaceships from './Spaceships';
+import Search from './Search';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -18,6 +19,10 @@ function renderScreens(Navigator) {
       <Navigator.Screen
         name='Home'
         component={Home}
+      />
+      <Navigator.Screen
+        name='Search'
+        component={Search}
       />
       <Navigator.Screen
         name='Planets'

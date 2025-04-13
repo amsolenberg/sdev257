@@ -12,6 +12,13 @@ export default function Home() {
 
       <View style={styles.button}>
         <Button
+          title='Search'
+          onPress={() => navigation.navigate('Search')}
+        />
+      </View>
+
+      <View style={styles.button}>
+        <Button
           title='Go to Planets'
           onPress={() => navigation.navigate('Planets')}
         />
