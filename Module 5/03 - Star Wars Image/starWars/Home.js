@@ -3,6 +3,7 @@ import React from 'react';
 import { View, Text, Button } from 'react-native';
 import styles from './styles';
 import { useNavigation } from '@react-navigation/native';
+import LazyImage from './LazyImage';
 
 export default function Home() {
   // Get navigation instance
@@ -11,6 +12,11 @@ export default function Home() {
   // Display welcome message and navigation buttons
   return (
     <View style={styles.container}>
+      <LazyImage
+        source={require('./assets/Star_Wars_Logo.png')}
+        style={{ width: '100%', height: 100, marginBottom: 10 }}
+        resizeMode='contain'
+      />
       <Text style={styles.title}>Welcome to the Star Wars App</Text>
 
       <View style={styles.button}>

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Modal, Button } from 'react-native';
 import styles from './styles';
+import LazyImage from './LazyImage';
 
 export default function Search() {
   // State for search input and modal visibility
@@ -15,6 +16,11 @@ export default function Search() {
 
   return (
     <View style={styles.container}>
+      <LazyImage
+        source={require('./assets/Star_Wars_Logo.png')}
+        style={{ width: '100%', height: 100, marginBottom: 10 }}
+        resizeMode='contain'
+      />
       <Text style={styles.title}>Search Star Wars Data</Text>
       <TextInput
         style={styles.textInput}

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { View, ActivityIndicator, ScrollView } from 'react-native';
 import styles from './styles';
 import SwipeableItem from './SwipeableItem';
+import LazyImage from './LazyImage';
 
 export default function Films() {
   // Define state for films data and loading status
@@ -37,6 +38,11 @@ export default function Films() {
   // Render list of film titles
   return (
     <View style={styles.container}>
+      <LazyImage
+        source={require('./assets/Star_Wars_Logo.png')}
+        style={{ width: '100%', height: 100, marginBottom: 10 }}
+        resizeMode='contain'
+      />
       <ScrollView>
         {films.map((item) => (
           <SwipeableItem

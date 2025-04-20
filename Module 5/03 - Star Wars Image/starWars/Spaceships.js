@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { View, ActivityIndicator, ScrollView } from 'react-native';
 import styles from './styles';
 import SwipeableItem from './SwipeableItem';
+import LazyImage from './LazyImage';
 
 export default function Spaceships() {
   // State for spaceship data and loading flag
@@ -36,6 +37,11 @@ export default function Spaceships() {
   // Show list of spaceship names
   return (
     <View style={styles.container}>
+      <LazyImage
+        source={require('./assets/Star_Wars_Logo.png')}
+        style={{ width: '100%', height: 100, marginBottom: 10 }}
+        resizeMode='contain'
+      />
       <ScrollView>
         {spaceships.map((item) => (
           <SwipeableItem
