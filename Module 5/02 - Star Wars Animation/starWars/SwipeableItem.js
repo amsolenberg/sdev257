@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, Modal, Button, TouchableOpacity } from 'react-native';
+import Animated, { SlideInLeft } from 'react-native-reanimated';
 import styles from './styles';
 
 export default function SwipeableItem({ label }) {
@@ -12,39 +13,41 @@ export default function SwipeableItem({ label }) {
   };
 
   return (
-    <View style={styles.swipeContainer}>
-      <ScrollView
-        horizontal
-        pagingEnabled
-        scrollEventThrottle={16}
-        showsHorizontalScrollIndicator={false}
-        onScroll={handleScroll}
-      >
-        <TouchableOpacity>
-          <View style={styles.item}>
-            <Text style={styles.itemText}>{label}</Text>
-          </View>
-        </TouchableOpacity>
-        <View style={{ width: 200 }} />
-      </ScrollView>
+    <Animated.View entering={SlideInLeft}>
+      <View style={styles.swipeContainer}>
+        <ScrollView
+          horizontal
+          pagingEnabled
+          scrollEventThrottle={16}
+          showsHorizontalScrollIndicator={false}
+          onScroll={handleScroll}
+        >
+          <TouchableOpacity>
+            <View style={styles.item}>
+              <Text style={styles.itemText}>{label}</Text>
+            </View>
+          </TouchableOpacity>
+          <View style={{ width: 200 }} />
+        </ScrollView>
 
-      <Modal
-        visible={modalVisible}
-        transparent
-        animationType='slide'
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalInner}>
-            <Text style={styles.modalText}>You selected:</Text>
-            <Text style={styles.modalText}>{label}</Text>
-            <Button
-              title='Close'
-              onPress={() => setModalVisible(false)}
-            />
+        <Modal
+          visible={modalVisible}
+          transparent
+          animationType='slide'
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalInner}>
+              <Text style={styles.modalText}>You selected:</Text>
+              <Text style={styles.modalText}>{label}</Text>
+              <Button
+                title='Close'
+                onPress={() => setModalVisible(false)}
+              />
+            </View>
           </View>
-        </View>
-      </Modal>
-    </View>
+        </Modal>
+      </View>
+    </Animated.View>
   );
 }
