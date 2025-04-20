@@ -1,7 +1,8 @@
 // Import components and styles
-import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, ActivityIndicator, ScrollView } from 'react-native';
 import styles from './styles';
+import SwipeableItem from './SwipeableItem';
 
 export default function Spaceships() {
   // State for spaceship data and loading flag
@@ -35,15 +36,14 @@ export default function Spaceships() {
   // Show list of spaceship names
   return (
     <View style={styles.container}>
-      <FlatList
-        data={spaceships}
-        keyExtractor={(item) => item.uid.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Text style={styles.itemText}>{item.name}</Text>
-          </View>
-        )}
-      />
+      <ScrollView>
+        {spaceships.map((item) => (
+          <SwipeableItem
+            key={item.uid}
+            label={item.name}
+          />
+        ))}
+      </ScrollView>
     </View>
   );
 }

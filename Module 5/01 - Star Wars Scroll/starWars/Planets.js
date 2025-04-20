@@ -1,7 +1,8 @@
 // Import components and styles
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, ScrollView } from 'react-native';
 import styles from './styles';
+import SwipeableItem from './SwipeableItem';
 
 export default function Planets() {
   // State for planet data and loading status
@@ -37,15 +38,14 @@ export default function Planets() {
   // Render list of planets
   return (
     <View style={styles.container}>
-      <FlatList
-        data={planets}
-        keyExtractor={(item) => item.uid.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Text style={styles.itemText}>{item.name}</Text>
-          </View>
-        )}
-      />
+      <ScrollView>
+        {planets.map((item) => (
+          <SwipeableItem
+            key={item.uid}
+            label={item.name}
+          />
+        ))}
+      </ScrollView>
     </View>
   );
 }

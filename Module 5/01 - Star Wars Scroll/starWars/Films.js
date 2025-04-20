@@ -1,7 +1,8 @@
 // Import necessary modules and styles
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, ScrollView } from 'react-native';
 import styles from './styles';
+import SwipeableItem from './SwipeableItem';
 
 export default function Films() {
   // Define state for films data and loading status
@@ -36,15 +37,14 @@ export default function Films() {
   // Render list of film titles
   return (
     <View style={styles.container}>
-      <FlatList
-        data={films}
-        keyExtractor={(item) => item.uid.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Text style={styles.itemText}>{item.properties.title}</Text>
-          </View>
-        )}
-      />
+      <ScrollView>
+        {films.map((item) => (
+          <SwipeableItem
+            key={item.uid}
+            label={item.properties?.title}
+          />
+        ))}
+      </ScrollView>
     </View>
   );
 }

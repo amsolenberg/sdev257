@@ -67,5 +67,10 @@ export default StyleSheet.create({
     fontSize: 18,
     marginBottom: 10,
     textAlign: 'center'
+  },
+  swipeContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    height: 80
   }
 });
