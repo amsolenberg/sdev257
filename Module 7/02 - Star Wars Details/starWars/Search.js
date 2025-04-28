@@ -35,17 +35,18 @@ export default function Search() {
       .then(([planetsData, filmsData, starshipsData]) => {
         // Normalize the fetched data so everything has a "name" field
         const planets = (planetsData.results || []).map((item) => ({
-          uid: item.uid,
-          name: item.name
+          uid: `planet-${item.uid}`,
+          name: item.name,
+          isPlanet: true
         }));
 
         const films = (filmsData.result || []).map((item) => ({
-          uid: item.uid,
+          uid: `film-${item.uid}`,
           name: item.properties?.title || ''
         }));
 
         const starships = (starshipsData.results || []).map((item) => ({
-          uid: item.uid,
+          uid: `starship-${item.uid}`,
           name: item.name
         }));
 
@@ -112,6 +113,7 @@ export default function Search() {
           <SwipeableItem
             key={item.uid}
             label={item.name}
+            isPlanet={item.isPlanet || false}
           />
         ))}
       </ScrollView>

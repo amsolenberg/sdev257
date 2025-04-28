@@ -4,6 +4,7 @@ import { Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // Import screen components for navigation
 import Home from './Home';
@@ -11,10 +12,29 @@ import Planets from './Planets';
 import Films from './Films';
 import Spaceships from './Spaceships';
 import Search from './Search';
+import PlanetDetail from './PlanetDetail';
 
 // Create instances of both navigators
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
+const PlanetsStack = createNativeStackNavigator();
+
+function PlanetsStackScreen() {
+  return (
+    <PlanetsStack.Navigator>
+      <PlanetsStack.Screen
+        name='Planets'
+        component={Planets}
+        options={{ title: 'Planets' }}
+      />
+      <PlanetsStack.Screen
+        name='PlanetDetail'
+        component={PlanetDetail}
+        options={{ title: 'Planet Details' }}
+      />
+    </PlanetsStack.Navigator>
+  );
+}
 
 // Helper function that renders screens using the provided Navigator type
 function renderScreens(Navigator) {
@@ -30,7 +50,8 @@ function renderScreens(Navigator) {
       />
       <Navigator.Screen
         name='Planets'
-        component={Planets}
+        component={PlanetsStackScreen}
+        options={{ headerShown: false }}
       />
       <Navigator.Screen
         name='Films'

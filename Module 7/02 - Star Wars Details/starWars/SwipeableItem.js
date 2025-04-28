@@ -1,53 +1,86 @@
-import React, { useState } from 'react';
-import { View, Text, ScrollView, Modal, Button, TouchableOpacity } from 'react-native';
-import Animated, { SlideInLeft } from 'react-native-reanimated';
-import styles from './styles';
+import React, { useRef } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { Swipeable } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
-export default function SwipeableItem({ label }) {
-  const [modalVisible, setModalVisible] = useState(false);
+let currentlyOpenSwipeable = null;
 
-  const handleScroll = (e) => {
-    if (e.nativeEvent.contentOffset.x >= 150) {
-      setModalVisible(true);
+export default function SwipeableItem({ label, itemData, isPlanet }) {
+  const navigation = useNavigation();
+  const swipeableRef = useRef(null);
+
+  const handleSwipe = async () => {
+    if (isPlanet && itemData) {
+      try {
+        const response = await fetch(itemData.url);
+        const data = await response.json();
+        const fullPlanetData = data.result?.properties || {};
+
+        if (Object.keys(fullPlanetData).length > 0) {
+          navigation.navigate('PlanetDetail', { uid: itemData.uid });
+        } else {
+          console.error('Planet details missing.');
+        }
+      } catch (error) {
+        console.error('Error fetching planet details:', error);
+      }
     }
   };
 
-  return (
-    <Animated.View entering={SlideInLeft}>
-      <View style={styles.swipeContainer}>
-        <ScrollView
-          horizontal
-          pagingEnabled
-          scrollEventThrottle={16}
-          showsHorizontalScrollIndicator={false}
-          onScroll={handleScroll}
-        >
-          <TouchableOpacity>
-            <View style={styles.item}>
-              <Text style={styles.itemText}>{label}</Text>
-            </View>
-          </TouchableOpacity>
-          <View style={{ width: 200 }} />
-        </ScrollView>
+  const handleSwipeableWillOpen = () => {
+    if (currentlyOpenSwipeable && currentlyOpenSwipeable !== swipeableRef.current) {
+      currentlyOpenSwipeable.close();
+    }
+    currentlyOpenSwipeable = swipeableRef.current;
+  };
 
-        <Modal
-          visible={modalVisible}
-          transparent
-          animationType='slide'
-          onRequestClose={() => setModalVisible(false)}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalInner}>
-              <Text style={styles.modalText}>You selected:</Text>
-              <Text style={styles.modalText}>{label}</Text>
-              <Button
-                title='Close'
-                onPress={() => setModalVisible(false)}
-              />
-            </View>
-          </View>
-        </Modal>
+  const renderRightActions = () => <View style={styles.rightBackground} />;
+
+  return (
+    <Swipeable
+      ref={swipeableRef}
+      onSwipeableOpen={isPlanet ? handleSwipe : undefined}
+      onSwipeableWillOpen={isPlanet ? handleSwipeableWillOpen : undefined}
+      renderRightActions={isPlanet ? renderRightActions : undefined}
+      friction={2}
+      rightThreshold={40}
+      overshootRight={false}
+    >
+      <View style={styles.foreground}>
+        <Text style={styles.itemText}>{label}</Text>
       </View>
-    </Animated.View>
+    </Swipeable>
   );
 }
+
+export function closeCurrentlyOpenSwipeable() {
+  if (currentlyOpenSwipeable) {
+    currentlyOpenSwipeable.close();
+    currentlyOpenSwipeable = null;
+  }
+}
+
+const styles = StyleSheet.create({
+  foreground: {
+    backgroundColor: '#fff',
+    padding: 20,
+    marginBottom: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    justifyContent: 'center'
+  },
+  rightBackground: {
+    backgroundColor: '#4CAF50',
+    flex: 1,
+    marginBottom: 10,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingRight: 20
+  },
+  itemText: {
+    fontSize: 18,
+    color: '#333'
+  }
+});

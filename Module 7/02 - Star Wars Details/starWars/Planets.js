@@ -1,18 +1,25 @@
-// Import components and styles
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, ActivityIndicator, ScrollView } from 'react-native';
 import styles from './styles';
-import SwipeableItem from './SwipeableItem';
+import SwipeableItem, { closeCurrentlyOpenSwipeable } from './SwipeableItem';
 import LazyImage from './LazyImage';
 import NetInfo from '@react-native-community/netinfo';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function Planets() {
-  // State for planet data, loading status, and network connection
   const [planets, setPlanets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [connected, setConnected] = useState(true);
 
-  // Monitor network connection
+  // Close open swipeables when leaving the screen
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        closeCurrentlyOpenSwipeable();
+      };
+    }, [])
+  );
+
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
       setConnected(state.isConnected && state.isInternetReachable !== false);
@@ -20,7 +27,6 @@ export default function Planets() {
     return () => unsubscribe();
   }, []);
 
-  // Fetch planet data only if connected
   useEffect(() => {
     if (!connected) {
       setLoading(false);
@@ -31,12 +37,13 @@ export default function Planets() {
 
     fetch('https://www.swapi.tech/api/planets')
       .then((response) => response.json())
-      .then((data) => setPlanets(data.results))
-      .catch((error) => console.error('Error fetching planets: ', error))
+      .then((data) => {
+        setPlanets(data.results || []);
+      })
+      .catch((error) => console.error('Error fetching planets:', error))
       .finally(() => setLoading(false));
   }, [connected]);
 
-  // Show spinner while loading
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -48,7 +55,6 @@ export default function Planets() {
     );
   }
 
-  // Render screen content
   return (
     <View style={styles.container}>
       <LazyImage
@@ -57,7 +63,6 @@ export default function Planets() {
         resizeMode='contain'
       />
 
-      {/* Show offline message if not connected */}
       {!connected && (
         <View style={{ padding: 10, backgroundColor: '#ffe0e0', borderRadius: 6, marginBottom: 10 }}>
           <Text style={{ color: '#990000', textAlign: 'center' }}>
@@ -66,12 +71,13 @@ export default function Planets() {
         </View>
       )}
 
-      {/* Scrollable list of swipeable planet items */}
       <ScrollView>
         {planets.map((item) => (
           <SwipeableItem
             key={item.uid}
             label={item.name}
+            itemData={item}
+            isPlanet={true}
           />
         ))}
       </ScrollView>
